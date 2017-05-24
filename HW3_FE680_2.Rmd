@@ -1,20 +1,5 @@
----
-title: "FE680_HW3"
-author: "Ashwini"
-date: "March 17, 2017"
-output: html_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## Problem 2
-
 ### Vasicek Tree
 
-Tree Structure
-```{r}
 r0.1<-5.121 ##r0=given
 rinf.1<-6.179 ##  rinfinity=given
 lambda.1<-0.229 ##lambda=give
@@ -117,11 +102,9 @@ for (i in 4:(steps1+1)){
 write.csv(vasicektree1,file="Vasicek Tree.csv")  ##saving the matrix as CSV file
 
 head(vasicektree1)
-```
 
 ### Expectation & Standard Deviation Chart
 
-```{r }
 ##Timeline for plotting chart
 timeline<-seq(0,30,1)  
 
@@ -141,39 +124,3 @@ lines(timeline,expectedrate+1*stddevwithoutmr,lty=1)
 lines(timeline,expectedrate-1*stddevwithoutmr,lty=1)
 ##Plotting the starting Point
 points(0,r0.1)
-```
-
-### Monte Carlo Simulation
-```{r}
-##Function for Monte Carlo
-
-vasicekshoortrateMC<-function(r0,rinf,lambda,k,sigma,n,dt,N){
-  theta= rinf+(lambda/k) #theta calculation
-  sigma=sigma/12 #sigma per month
-  
-  r=matrix(0,n+1,N)
-  r[1,]=r0
-  for(j in 1:N){
-    for (i in 2:(n+1)){
-    dr=k*(theta-r[i-1,j])*dt+sigma*sqrt(dt)*rnorm(1,0,1)
-    r[i,j] = r[i-1,j]+dr
-    }
-  }  
-return(r)
-}
-
-MCsimulation<-vasicekshoortrateMC(5.121,6.179,0.229,0.025,126,30,1/12,1000)
-
-##Plotting the paths with standard deviations
-matplot(timeline, MCsimulation[,1:1000], type="l", lty=1, main="Monte Carlo Short Rate Paths", ylab="Rate",xlab="Time",ylim=range(expectedrate+1*stddevwithoutmr,expectedrate-1*stddevwithoutmr)) 
-##Plotting theta
-abline(h=theta, col="red", lty=2)
-##Plotting standard deviations
-lines(timeline, expectedrate, lty=1,lwd=3,col="blue") 
-lines(timeline, expectedrate + 1*stddevwithmr, lty=2, lwd=3) 
-lines(timeline, expectedrate - 1*stddevwithmr, lty=2, lwd=3) 
-lines(timeline, expectedrate + 1*stddevwithoutmr, lty=1, lwd=3) 
-lines(timeline, expectedrate - 1*stddevwithoutmr, lty=1, lwd=3) 
-##Plotting starting point
-points(0,r0.1)
-```
