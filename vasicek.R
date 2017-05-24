@@ -1,8 +1,6 @@
-### Vasicek Tree
-
 r0.1<-5.121 ##r0=given
 rinf.1<-6.179 ##  rinfinity=given
-lambda.1<-0.229 ##lambda=give
+lambda.1<-0.229 ##lambda=given
 k.1<-0.025  ##kappa = given (mean reversion speed)
 sigma.1<-126/12  ##sigma per period
 vol.1<-0.0126*(sqrt(1/12))*100  ##volatility per period
@@ -100,27 +98,3 @@ for (i in 4:(steps1+1)){
 }
 
 write.csv(vasicektree1,file="Vasicek Tree.csv")  ##saving the matrix as CSV file
-
-head(vasicektree1)
-
-### Expectation & Standard Deviation Chart
-
-##Timeline for plotting chart
-timeline<-seq(0,30,1)  
-
-expectedrate<- r0.1*exp(-k.1*timeline)+(theta)*(1-exp(-k.1*timeline))  ##Expected Rate line
-
-stddevwithmr<-sqrt( sigma.1^2/(2*k.1)*(1-exp(-k.1*timeline))) ##Standard Deviation with mean reversion
-stddevwithoutmr<-sigma.1*sqrt(timeline)  ##Standard deviation without mean reversion
-
-## Plot of Expected rate
-matplot(timeline,expectedrate,type="l",lty=2,main="Mean Reversion and the Terminal Distributions of Short Rates",ylab="Rate",xlab="Time (Months)",col="blue", ylim=range(expectedrate+1*stddevwithoutmr,expectedrate-1*stddevwithoutmr))
-##Plotting Theta
-abline(h=theta,col="red",lty=2)
-##Plotting the standard deviations
-lines(timeline,expectedrate+1*stddevwithmr,lty=2)
-lines(timeline,expectedrate-1*stddevwithmr,lty=2)
-lines(timeline,expectedrate+1*stddevwithoutmr,lty=1)
-lines(timeline,expectedrate-1*stddevwithoutmr,lty=1)
-##Plotting the starting Point
-points(0,r0.1)
